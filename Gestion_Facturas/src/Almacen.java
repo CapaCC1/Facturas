@@ -8,7 +8,12 @@ public class Almacen {
 	public Almacen(LinkedHashMap<Integer, Producto> stock) {
 		this.stock = new LinkedHashMap<Integer, Producto>();
 	}
-
+	
+	public Almacen() {
+		this.productos = new LinkedHashMap<String, Producto>();
+		this.stock = new LinkedHashMap<Integer, Producto>();
+	}
+	
 	public LinkedHashMap<Integer, Producto> getStock() {
 		return stock;
 	}
@@ -25,7 +30,7 @@ public class Almacen {
 		this.productos = productos;
 	}
 	
-	public boolean existeProducto(String nombre, double precio) {
+	public boolean existeProducto(String nombre) {
 		
 		boolean existe = false;
 		if(productos.containsKey(nombre)) {
@@ -38,7 +43,7 @@ public class Almacen {
 		
 		int codigo = -1;
 		Producto producto = null;
-		if(existeProducto(nombre, precio) && (producto == null)) {
+		if(!existeProducto(nombre)) {
 			producto = new Producto(nombre,precio);
 			stock.put(cantidad, producto);
 			productos.put(nombre, producto);
@@ -48,5 +53,43 @@ public class Almacen {
 		}
 		return codigo;
 	}
+	
+	public Producto buscaProducto(String nombre) {
+		
+		Producto producto = productos.get(nombre);
+		return producto;
+	}
+	
+	public void reponerStock(String nombreProducto, int cantidad) {
+	    Producto producto = buscaProducto(nombreProducto);
+	    if (producto != null) {
+	        int cantidadActual = 0;
+	        for (Integer cant : stock.keySet()) {
+	            if (stock.get(cant).equals(producto)) {
+	                cantidadActual = cant;
+	                break;
+	            }
+	        }
+	        stock.remove(cantidadActual);
+	        stock.put(cantidadActual + cantidad, producto);
+	    }
+	}
+	
+	@Override
+	public String toString() {
+	    StringBuilder sb = new StringBuilder();
+	    for (Integer cantidad : stock.keySet()) {
+	        Producto producto = stock.get(cantidad);
+	        sb.append("\nProducto: ");
+	        sb.append(producto.getNombre());
+	        sb.append("\nPrecio: ");
+	        sb.append(producto.getPrecio());
+	        sb.append("\nCantidad: ");
+	        sb.append(cantidad);
+	        sb.append("\n");
+	    }
+	    return sb.toString();
+	}
+	
 	
 }

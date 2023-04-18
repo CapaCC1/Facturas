@@ -11,6 +11,7 @@ public class Comercio {
 	}
 	
 	public Comercio() {
+		this.almacen = new Almacen();
 		this.clientes = new HashMap<String, Cliente>();
 	}
 
@@ -48,20 +49,41 @@ public class Comercio {
 	public int agregarCliente(String nombre,String apellidos,String dni, int descuento) {
 		int codigo = -1;
 		Cliente cliente = null;
-		if(!clienteExiste(dni) && (cliente == null)) {
+		
+		if(!clienteExiste(dni)) {
 			cliente = new Cliente(nombre,apellidos,dni,descuento);
 			clientes.put(dni, cliente);
 			codigo = 0;
-		}else {
+		} else {
 			codigo = 1;
 		}
 		return codigo;
 	}
 	
-	public void incorporarProducto(String nombre,double precio,int stock) {
-		almacen.agregarProductos(nombre, precio,stock);
+	public int incorporarProducto(String nombre,double precio,int stock) {
+		int codigo = -1;
+		if(!almacen.existeProducto(nombre)) {
+			almacen.agregarProductos(nombre, precio,stock);
+			codigo = 0;
+		}else {
+			codigo = 1;
+		}
 		
+		return codigo;
 	}
 	
+	public int actualizarStock(String nombre, int cantidad) {
+		int codigo = -1;
+		if(almacen.existeProducto(nombre)) {
+			almacen.reponerStock(nombre, cantidad);
+			codigo = 0;
+		}else if(!almacen.existeProducto(nombre)){
+			codigo = 1;
+		}else if(almacen == null) {
+			codigo = 2;
+		}
+		System.out.println(almacen);
+		return codigo;
+	}
 
 }

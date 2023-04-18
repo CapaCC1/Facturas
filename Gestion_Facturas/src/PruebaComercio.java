@@ -36,9 +36,9 @@ public class PruebaComercio {
 				int descuento = in1.nextInt();
 				int codigo = amazon.agregarCliente(nombre, apellidos, dni, descuento);
 				if(codigo == 0) {
-					System.out.println("Cliente Agregado con Exito!");
+					System.out.println("\nCliente Agregado con Exito!");
 				}else if(codigo == 1) {
-					System.out.println("\tERROR al Agregar Cliente!");
+					System.out.println("\nERROR al Agregar Cliente!");
 				}
 				break;
 				
@@ -50,10 +50,27 @@ public class PruebaComercio {
 				double precioP = in1.nextDouble();
 				System.out.print("Introduzca la Cantidad: ");
 				int stock = in1.nextInt();
-				amazon.incorporarProducto(nombreP, precioP, stock);
+				codigo = amazon.incorporarProducto(nombreP, precioP, stock);
+				if(codigo == 0) {
+					System.out.println("\nProducto Incorporado con EXITO!");
+					
+				}else if(codigo == 1) {
+					System.out.println("\nERROR al Incorporar Producto!");
+				}
+				break;
 				
-				
-				
+			case 3:
+				System.out.println("\n--REPONER STOCK--\n");
+				System.out.print("Introduce el Nombre del Producto a Reponer: ");
+				nombreP = in1.next();
+				System.out.print("Introduce la Cantidad a Reponer: ");
+				int cantidad = in1.nextInt();
+				codigo = amazon.actualizarStock(nombreP, cantidad);
+				if(codigo == 0) {
+					System.out.println("Stock Actualizado!");
+				}else if(codigo == 1) {
+					System.out.println("ERROR El Producto No Existe!");
+				}
 			}
 		}
 
