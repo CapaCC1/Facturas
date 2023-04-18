@@ -1,22 +1,25 @@
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Factura {
+	private LocalDateTime fechaCreacion;
 	private Cliente cliente;
-	private ArrayList<Pedido>pedidos;
 	private double total;
+	private ArrayList<Pedido> pedidos;
 	
-	public Factura(Cliente cliente, ArrayList<Pedido> pedidos, double total) {
-		this.cliente = cliente;
+	public Factura(String id, ArrayList<Pedido> pedidos, Cliente cliente, double total) {
+		this.fechaCreacion = LocalDateTime.now();
 		this.pedidos = pedidos;
+		this.cliente = cliente;
 		this.total = total;
 	}
-
-	public Cliente getCliente() {
-		return cliente;
+	
+	public LocalDateTime getFechaCreacion() {
+		return fechaCreacion;
 	}
 
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
+	public void setFechaCreacion(LocalDateTime fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
 	}
 
 	public ArrayList<Pedido> getPedidos() {
@@ -25,6 +28,14 @@ public class Factura {
 
 	public void setPedidos(ArrayList<Pedido> pedidos) {
 		this.pedidos = pedidos;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
 	public double getTotal() {

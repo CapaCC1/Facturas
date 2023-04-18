@@ -1,11 +1,9 @@
 
 public class Pedido {
-	private int id;
 	private Producto producto;
 	private int cantidad;
 	
-	public Pedido(int id,Producto producto, int cantidad) {
-		this.id = id;
+	public Pedido(Producto producto, int cantidad) {
 		this.producto = producto;
 		this.cantidad = cantidad;
 	}
@@ -24,13 +22,6 @@ public class Pedido {
 
 	public void setCantidad(int cantidad) {
 		this.cantidad = cantidad;
-	}
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 	
 	

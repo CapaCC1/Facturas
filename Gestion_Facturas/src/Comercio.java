@@ -1,20 +1,23 @@
 
+import java.util.HashMap;
+
 public class Comercio {
-	private Factura ultimaFactura;
 	private Almacen almacen;
+	private HashMap<String, Cliente> clientes;
+	private HashMap<String, Factura> facturas;
 	
-	public Comercio(Factura ultimaFactura, Almacen almacen) {
-		super();
-		this.ultimaFactura = ultimaFactura;
+	public Comercio(Almacen almacen, HashMap<String, Cliente> clientes, HashMap<String, Factura> facturas) {
 		this.almacen = almacen;
+		this.clientes = new HashMap<String, Cliente>();
+		this.facturas = new HashMap<String, Factura>();
 	}
 
-	public Factura getUltimaFactura() {
-		return ultimaFactura;
+	public HashMap<String, Cliente> getClientes() {
+		return clientes;
 	}
 
-	public void setUltimaFactura(Factura ultimaFactura) {
-		this.ultimaFactura = ultimaFactura;
+	public void setClientes(HashMap<String, Cliente> clientes) {
+		this.clientes = clientes;
 	}
 
 	public Almacen getAlmacen() {
@@ -23,6 +26,14 @@ public class Comercio {
 
 	public void setAlmacen(Almacen almacen) {
 		this.almacen = almacen;
+	}
+
+	public HashMap<String, Factura> getFacturas() {
+		return facturas;
+	}
+
+	public void setFacturas(HashMap<String, Factura> facturas) {
+		this.facturas = facturas;
 	}
 	
 	
