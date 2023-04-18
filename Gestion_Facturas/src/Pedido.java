@@ -1,19 +1,21 @@
+import java.util.LinkedHashMap;
 
 public class Pedido {
-	private Producto producto;
 	private int cantidad;
-	
-	public Pedido(Producto producto, int cantidad) {
-		this.producto = producto;
+	private LinkedHashMap<String,Producto> productos;
+
+	public Pedido(int cantidad, LinkedHashMap<String, Producto> productos) {
+		super();
 		this.cantidad = cantidad;
+		this.productos = new LinkedHashMap<String, Producto>();
+	}
+	
+	public LinkedHashMap<String, Producto> getProductos() {
+		return productos;
 	}
 
-	public Producto getProducto() {
-		return producto;
-	}
-
-	public void setProducto(Producto producto) {
-		this.producto = producto;
+	public void setProductos(LinkedHashMap<String, Producto> productos) {
+		this.productos = productos;
 	}
 
 	public int getCantidad() {

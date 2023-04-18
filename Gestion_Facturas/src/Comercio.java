@@ -4,12 +4,14 @@ import java.util.HashMap;
 public class Comercio {
 	private Almacen almacen;
 	private HashMap<String, Cliente> clientes;
-	private HashMap<String, Factura> facturas;
 	
-	public Comercio(Almacen almacen, HashMap<String, Cliente> clientes, HashMap<String, Factura> facturas) {
+	public Comercio(Almacen almacen, HashMap<String, Cliente> clientes) {
 		this.almacen = almacen;
 		this.clientes = new HashMap<String, Cliente>();
-		this.facturas = new HashMap<String, Factura>();
+	}
+	
+	public Comercio() {
+		this.clientes = new HashMap<String, Cliente>();
 	}
 
 	public HashMap<String, Cliente> getClientes() {
@@ -27,13 +29,39 @@ public class Comercio {
 	public void setAlmacen(Almacen almacen) {
 		this.almacen = almacen;
 	}
-
-	public HashMap<String, Factura> getFacturas() {
-		return facturas;
+	
+	public boolean clienteExiste(String dni) {
+		boolean resultado = false;
+		if(clientes.containsKey(dni)) {
+			resultado = true;;
+		}
+		return resultado;
 	}
-
-	public void setFacturas(HashMap<String, Factura> facturas) {
-		this.facturas = facturas;
+	
+	public Cliente buscaCliente(String dni) {
+		
+		Cliente cliente = clientes.get(dni);
+		
+		return cliente;
 	}
+	
+	public int agregarCliente(String nombre,String apellidos,String dni, int descuento) {
+		int codigo = -1;
+		Cliente cliente = null;
+		if(!clienteExiste(dni) && (cliente == null)) {
+			cliente = new Cliente(nombre,apellidos,dni,descuento);
+			clientes.put(dni, cliente);
+			codigo = 0;
+		}else {
+			codigo = 1;
+		}
+		return codigo;
+	}
+	
+	public void incorporarProducto(String nombre,double precio,int stock) {
+		almacen.agregarProductos(nombre, precio,stock);
+		
+	}
+	
 
 }
