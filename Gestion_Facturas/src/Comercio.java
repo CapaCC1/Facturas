@@ -35,7 +35,5 @@ public class Comercio {
 	public void setFacturas(HashMap<String, Factura> facturas) {
 		this.facturas = facturas;
 	}
-	
-	
-	
+
 }
