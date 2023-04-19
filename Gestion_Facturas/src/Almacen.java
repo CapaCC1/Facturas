@@ -39,6 +39,18 @@ public class Almacen {
 		return existe;
 	}
 	
+	public int consultaStock(Producto producto) {
+		int resultado = -1;
+			for (Integer cantidad : stock.keySet()) {
+				if(stock.get(cantidad).equals(producto)) {
+					resultado = cantidad;
+				}
+			}
+			
+		
+		return resultado;
+	}
+	
 	public int agregarProductos(String nombre, double precio, int cantidad) {
 		
 		int codigo = -1;
@@ -71,6 +83,20 @@ public class Almacen {
 	            }
 	        }
 	        stock.put(cantidadActual + cantidad, producto);
+	    }
+	}
+	
+	public void actualizarStock(String nombreProducto, int cantidad) {
+	    Producto producto = buscaProducto(nombreProducto);
+	    if (producto != null) {
+	        int cantidadActual = 0;
+	        for (Integer cant : stock.keySet()) {
+	            if (stock.get(cant).equals(producto)) {
+	                cantidadActual = cant;
+	                break;
+	            }
+	        }
+	        stock.put(cantidadActual - cantidad, producto);
 	    }
 	}
 	

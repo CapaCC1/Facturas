@@ -71,6 +71,28 @@ public class PruebaComercio {
 				}else if(codigo == 1) {
 					System.out.println("ERROR El Producto No Existe!");
 				}
+				break;
+			case 4:
+				System.out.println("\n--GENERAR PEDIDO--\n");
+				System.out.print("Introduce el DNI del Cliente: ");
+				dni = in1.next();
+				System.out.println(amazon.mostrarProductos());
+				System.out.print("\nIntroduce el Producto que quieres Comprar: ");
+				nombreP = in1.next();
+				System.out.print("Introduce la cantidad a Comprar: ");
+				cantidad = in1.nextInt();
+				
+				codigo = amazon.generarPedido(dni, nombreP, cantidad);
+				if(codigo == 0) {
+					 System.out.println("Pedido generado correctamente.");
+				}else if(codigo == 1) {
+					System.out.println("No hay suficiente stock del producto seleccionado.");
+				}else if(codigo == 2) {
+					System.out.println("No existe un producto con ese nombre.");
+				}else if(codigo == 3) {
+					System.out.println("No existe un cliente con ese DNI.");
+				}
+				break;
 			}
 		}
 

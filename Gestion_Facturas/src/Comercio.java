@@ -72,6 +72,10 @@ public class Comercio {
 		return codigo;
 	}
 	
+	public String mostrarProductos() {
+		return almacen.toString();
+	}
+	
 	public int actualizarStock(String nombre, int cantidad) {
 		int codigo = -1;
 		if(almacen.existeProducto(nombre)) {
@@ -83,6 +87,34 @@ public class Comercio {
 			codigo = 2;
 		}
 		return codigo;
+	}
+	
+	public int generarPedido(String dniCliente, String nombreProducto, int cantidad) {
+	    int codigo = -1;
+	    
+	    Cliente cliente = clientes.get(dniCliente);
+	    
+	    if (cliente != null) {
+	        Producto producto = almacen.buscaProducto(nombreProducto);
+	        if (producto != null) {
+	            int stockActual = almacen.consultaStock(producto);
+	            if (stockActual >= cantidad) {
+	              
+	                cliente.agregarNuevoPedido(cantidad,nombreProducto,producto);
+	                almacen.actualizarStock(nombreProducto, cantidad);
+	                cliente.mostrarPedidos();
+	                codigo = 0;
+	            } else {
+	                codigo = 1;
+	            }
+	        } else {
+	            codigo = 2;
+	        }
+	    } else {
+	        codigo = 3;
+	    }
+	    
+	    return codigo;
 	}
 
 }

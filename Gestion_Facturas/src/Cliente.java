@@ -16,6 +16,8 @@ public class Cliente {
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.descuento = descuento;
+		this.pedidos = new ArrayList<Pedido>();
+		this.facturas = new LinkedHashMap<LocalDateTime, Factura>();
 	}
 	
 	public Cliente() {
@@ -75,7 +77,23 @@ public class Cliente {
 	public void setFacturas(LinkedHashMap<LocalDateTime, Factura> facturas) {
 		this.facturas = facturas;
 	}
-
+	
+	public void agregarNuevoPedido(int cantidad, String nombreProducto, Producto producto) {
+		Pedido pedido = new Pedido(cantidad);
+        pedido.agregarProducto(nombreProducto,producto,cantidad);
+        pedidos.add(pedido);
+    }
+	
+	public void mostrarPedidos() {
+	    for (Pedido pedido : pedidos) {
+	        System.out.println("Cantidad: " + pedido.getCantidad());
+	        System.out.println("Productos:");
+	        for (Producto producto : pedido.getProductos().values()) {
+	            System.out.println(producto.getNombre() + " - " + producto.getPrecio());
+	        }
+	    }
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -90,7 +108,7 @@ public class Cliente {
 
 	@Override
 	public String toString() {
-		return "DNI: " + dni + "\nNombre: " + nombre + "\nApellidos: " + apellidos;
+		return "DNI: " + dni + "\nNombre: " + nombre + "\nApellidos: " + apellidos + "\nPedidos: " + pedidos;
 	}
 	
 	
