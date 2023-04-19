@@ -82,7 +82,6 @@ public class Comercio {
 		}else if(almacen == null) {
 			codigo = 2;
 		}
-		System.out.println(almacen);
 		return codigo;
 	}
 

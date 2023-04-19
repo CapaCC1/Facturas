@@ -70,7 +70,6 @@ public class Almacen {
 	                break;
 	            }
 	        }
-	        stock.remove(cantidadActual);
 	        stock.put(cantidadActual + cantidad, producto);
 	    }
 	}
