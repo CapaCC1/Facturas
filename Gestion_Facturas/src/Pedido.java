@@ -39,6 +39,33 @@ public class Pedido {
 		productos.put(nombre, producto);
 	}
 	
+	public void aumentarCantidadProducto(Producto producto, int cantidad) {
+		int cantidadActual = 0;
+	    for (Producto pc : productos.values()) {
+	        if(pc.equals(producto)) {
+	        	cantidadActual = getCantidad();
+	        	setCantidad(cantidadActual + cantidad);
+	        }
+	    }
+	}
+	
+	public Producto buscarProductoPedido(String nombre) {
+		
+		Producto producto = productos.get(nombre);
+		return producto;
+	}
+	
+	public boolean existeProductoPedido(Producto producto) {
+		    for (Producto p : productos.values()) {
+		        if (p.equals(producto)) {
+		            return true;
+		        }
+		    }
+		    return false;
+		}
+	
+	
+	
 	@Override
 	public String toString() {
 		return "Cantidad: " + cantidad + "\nProductos=" + productos;

@@ -96,6 +96,7 @@ public class Almacen {
 	                break;
 	            }
 	        }
+	        stock.remove(cantidadActual,producto);
 	        stock.put(cantidadActual - cantidad, producto);
 	    }
 	}

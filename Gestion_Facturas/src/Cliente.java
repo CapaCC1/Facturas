@@ -79,17 +79,30 @@ public class Cliente {
 	}
 	
 	public void agregarNuevoPedido(int cantidad, String nombreProducto, Producto producto) {
-		Pedido pedido = new Pedido(cantidad);
-        pedido.agregarProducto(nombreProducto,producto,cantidad);
-        pedidos.add(pedido);
+		
+		Pedido pedidoExistente = null;
+	    for (Pedido pedido : pedidos) {
+	        if (pedido.existeProductoPedido(producto)) {
+	            pedidoExistente = pedido;
+	        }
+	        
+	    }if(pedidoExistente != null) {
+	    	pedidoExistente.aumentarCantidadProducto(producto, cantidad);
+	    }else {
+	    	Pedido pedido = new Pedido(cantidad);
+	        pedido.agregarProducto(nombreProducto,producto,cantidad);
+	        pedidos.add(pedido);
+	    }	
     }
 	
+	
 	public void mostrarPedidos() {
-	    for (Pedido pedido : pedidos) {
-	        System.out.println("Cantidad: " + pedido.getCantidad());
-	        System.out.println("Productos:");
+		for (Pedido pedido : pedidos) {
+	        System.out.print("Cantidad: " + pedido.getCantidad());
+	        System.out.print(" Productos:");
 	        for (Producto producto : pedido.getProductos().values()) {
 	            System.out.println(producto.getNombre() + " - " + producto.getPrecio());
+	            
 	        }
 	    }
 	}

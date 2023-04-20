@@ -6,7 +6,15 @@ public class PruebaComercio {
 		Scanner in1 = new Scanner(System.in);
 		
 		Comercio amazon = new Comercio();
+		/*amazon.agregarCliente("Paco", "Sainz", "1", 5);
+		amazon.agregarCliente("Jesus", "Lopez", "2", 6);
+		amazon.agregarCliente("Lucas", "Marco", "3", 7);
+		amazon.agregarCliente("Eric", "Torices", "4", 8);
 		
+		amazon.incorporarProducto("Coca-Cola", 1.3, 5);
+		amazon.incorporarProducto("Fanta", 1.2, 5);
+		amazon.incorporarProducto("Lacasitos", 1.1, 5);
+		amazon.incorporarProducto("Chuapa-Chups", 1, 5);*/
 		boolean salir = true;
 		while(salir) {
 			
@@ -57,6 +65,7 @@ public class PruebaComercio {
 				}else if(codigo == 1) {
 					System.out.println("\nERROR al Incorporar Producto!");
 				}
+				System.out.println(amazon.mostrarProductos());
 				break;
 				
 			case 3:
@@ -67,9 +76,9 @@ public class PruebaComercio {
 				int cantidad = in1.nextInt();
 				codigo = amazon.actualizarStock(nombreP, cantidad);
 				if(codigo == 0) {
-					System.out.println("Stock Actualizado!");
+					System.out.println("\nStock Actualizado!");
 				}else if(codigo == 1) {
-					System.out.println("ERROR El Producto No Existe!");
+					System.out.println("\nERROR El Producto No Existe!");
 				}
 				break;
 			case 4:
@@ -84,13 +93,13 @@ public class PruebaComercio {
 				
 				codigo = amazon.generarPedido(dni, nombreP, cantidad);
 				if(codigo == 0) {
-					 System.out.println("Pedido generado correctamente.");
+					 System.out.println("\nPedido generado correctamente.");
 				}else if(codigo == 1) {
-					System.out.println("No hay suficiente stock del producto seleccionado.");
+					System.out.println("\nNo hay suficiente stock del producto seleccionado.");
 				}else if(codigo == 2) {
-					System.out.println("No existe un producto con ese nombre.");
+					System.out.println("\nNo existe un producto con ese nombre.");
 				}else if(codigo == 3) {
-					System.out.println("No existe un cliente con ese DNI.");
+					System.out.println("\nNo existe un cliente con ese DNI.");
 				}
 				break;
 			}

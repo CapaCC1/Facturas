@@ -93,13 +93,11 @@ public class Comercio {
 	    int codigo = -1;
 	    
 	    Cliente cliente = clientes.get(dniCliente);
-	    
 	    if (cliente != null) {
 	        Producto producto = almacen.buscaProducto(nombreProducto);
 	        if (producto != null) {
 	            int stockActual = almacen.consultaStock(producto);
 	            if (stockActual >= cantidad) {
-	              
 	                cliente.agregarNuevoPedido(cantidad,nombreProducto,producto);
 	                almacen.actualizarStock(nombreProducto, cantidad);
 	                cliente.mostrarPedidos();
