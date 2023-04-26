@@ -15,6 +15,7 @@ public class Pedido {
 	}
 	
 	public Pedido() {
+		this.cantidad = 0;
 		this.productos = new LinkedHashMap<String, Producto>();
 	}
 	
@@ -34,13 +35,17 @@ public class Pedido {
 		this.cantidad = cantidad;
 	}
 	
-	public void agregarProducto(String nombre,Producto producto,int cantidad) {
-		setCantidad(cantidad);
-		productos.put(nombre, producto);
-	}
+	public void agregarProducto(String nombreProducto, int cantidad) {
+		
+		Producto nuevoProducto = new Producto(nombreProducto);
+		productos.put(nombreProducto, nuevoProducto);
+		aumentarCantidadProducto(nombreProducto, cantidad);
+	    }
 	
-	public void aumentarCantidadProducto(Producto producto, int cantidad) {
+	
+	public void aumentarCantidadProducto(String nombre, int cantidad) {
 		int cantidadActual = 0;
+		Producto producto = buscarProductoPedido(nombre);
 	    for (Producto pc : productos.values()) {
 	        if(pc.equals(producto)) {
 	        	cantidadActual = getCantidad();
@@ -55,7 +60,10 @@ public class Pedido {
 		return producto;
 	}
 	
-	public boolean existeProductoPedido(Producto producto) {
+	public boolean existeProductoPedido(String nombre) {
+		
+		Producto producto = buscarProductoPedido(nombre);
+		
 		    for (Producto p : productos.values()) {
 		        if (p.equals(producto)) {
 		            return true;
@@ -64,11 +72,9 @@ public class Pedido {
 		    return false;
 		}
 	
-	
-	
 	@Override
 	public String toString() {
-		return "Cantidad: " + cantidad + "\nProductos=" + productos;
+		return "Producto: " + productos + "\nCantidad: " + cantidad;
 	}
 	
 	

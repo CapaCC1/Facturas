@@ -39,26 +39,25 @@ public class Almacen {
 		return existe;
 	}
 	
-	public int consultaStock(Producto producto) {
+	public int consultaStock(String nombre) {
 		int resultado = -1;
+		Producto producto = buscaProducto(nombre);
 			for (Integer cantidad : stock.keySet()) {
 				if(stock.get(cantidad).equals(producto)) {
 					resultado = cantidad;
 				}
 			}
-			
-		
 		return resultado;
 	}
 	
 	public int agregarProductos(String nombre, double precio, int cantidad) {
 		
 		int codigo = -1;
-		Producto producto = null;
-		if(!existeProducto(nombre)) {
+		Producto producto = buscaProducto(nombre);
+		if(producto == null) {
 			producto = new Producto(nombre,precio);
-			stock.put(cantidad, producto);
 			productos.put(nombre, producto);
+			stock.put(cantidad, producto);
 			codigo = 0;
 		}else {
 			codigo = 1;
@@ -106,11 +105,11 @@ public class Almacen {
 	    StringBuilder sb = new StringBuilder();
 	    for (Integer cantidad : stock.keySet()) {
 	        Producto producto = stock.get(cantidad);
-	        sb.append("\nProducto: ");
+	        sb.append("\n|Producto: ");
 	        sb.append(producto.getNombre());
-	        sb.append("\nPrecio: ");
+	        sb.append(" | Precio: ");
 	        sb.append(producto.getPrecio());
-	        sb.append("\nCantidad: ");
+	        sb.append(" | Cantidad: ");
 	        sb.append(cantidad);
 	        sb.append("\n");
 	    }

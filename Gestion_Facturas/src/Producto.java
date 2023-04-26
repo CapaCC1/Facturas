@@ -8,6 +8,9 @@ public class Producto {
 		this.nombre = nombre;
 		this.precio = precio;
 	}
+	public Producto(String nombre) {
+		this.nombre = nombre;
+	}
 
 	public String getNombre() {
 		return nombre;

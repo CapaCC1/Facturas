@@ -78,30 +78,48 @@ public class Cliente {
 		this.facturas = facturas;
 	}
 	
-	public void agregarNuevoPedido(int cantidad, String nombreProducto, Producto producto) {
+	/*public void agregarNuevoPedido(int cantidad, String nombreProducto) {
 		
 		Pedido pedidoExistente = null;
 	    for (Pedido pedido : pedidos) {
-	        if (pedido.existeProductoPedido(producto)) {
+	        if (pedido.existeProductoPedido(nombreProducto)) {
 	            pedidoExistente = pedido;
 	        }
 	        
 	    }if(pedidoExistente != null) {
-	    	pedidoExistente.aumentarCantidadProducto(producto, cantidad);
+	    	pedidoExistente.aumentarCantidadProducto(nombreProducto, cantidad);
 	    }else {
 	    	Pedido pedido = new Pedido(cantidad);
-	        pedido.agregarProducto(nombreProducto,producto,cantidad);
+	        pedido.agregarProducto(nombreProducto,cantidad);
 	        pedidos.add(pedido);
 	    }	
-    }
+    }*/
 	
+	
+	public void agregarNuevoPedido(String nombreProducto, int cantidad) {
+		Pedido pedidoExistente = null;
+	    for (Pedido pedido : pedidos) {
+	        if (pedido.existeProductoPedido(nombreProducto)) {
+	            pedidoExistente = pedido;
+	        }   
+	    }
+		if(pedidoExistente != null) {
+	    	pedidoExistente.aumentarCantidadProducto(nombreProducto, cantidad);
+	    }else {    	
+	    Pedido pedido = new Pedido(cantidad);
+	    pedido.agregarProducto(nombreProducto, cantidad);
+	    
+	    pedidos.add(pedido);
+	    }
+
+	}
 	
 	public void mostrarPedidos() {
 		for (Pedido pedido : pedidos) {
 	        System.out.print("Cantidad: " + pedido.getCantidad());
-	        System.out.print(" Productos:");
+	        System.out.print(" Producto:");
 	        for (Producto producto : pedido.getProductos().values()) {
-	            System.out.println(producto.getNombre() + " - " + producto.getPrecio());
+	            System.out.println(producto.getNombre());
 	            
 	        }
 	    }

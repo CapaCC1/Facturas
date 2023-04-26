@@ -97,8 +97,6 @@ public class PruebaComercio {
 				}else if(codigo == 1) {
 					System.out.println("\nNo hay suficiente stock del producto seleccionado.");
 				}else if(codigo == 2) {
-					System.out.println("\nNo existe un producto con ese nombre.");
-				}else if(codigo == 3) {
 					System.out.println("\nNo existe un cliente con ese DNI.");
 				}
 				break;

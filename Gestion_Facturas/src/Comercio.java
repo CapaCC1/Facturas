@@ -90,29 +90,21 @@ public class Comercio {
 	}
 	
 	public int generarPedido(String dniCliente, String nombreProducto, int cantidad) {
-	    int codigo = -1;
-	    
-	    Cliente cliente = clientes.get(dniCliente);
-	    if (cliente != null) {
-	        Producto producto = almacen.buscaProducto(nombreProducto);
-	        if (producto != null) {
-	            int stockActual = almacen.consultaStock(producto);
-	            if (stockActual >= cantidad) {
-	                cliente.agregarNuevoPedido(cantidad,nombreProducto,producto);
-	                almacen.actualizarStock(nombreProducto, cantidad);
-	                cliente.mostrarPedidos();
-	                codigo = 0;
-	            } else {
-	                codigo = 1;
-	            }
-	        } else {
-	            codigo = 2;
-	        }
-	    } else {
-	        codigo = 3;
-	    }
-	    
-	    return codigo;
-	}
-
+    int codigo = -1;
+    Cliente cliente = clientes.get(dniCliente);
+    if (cliente != null) {
+            int stockActual = almacen.consultaStock(nombreProducto);
+            if (stockActual >= cantidad) {
+                cliente.agregarNuevoPedido(nombreProducto, cantidad);
+                almacen.actualizarStock(nombreProducto, cantidad);
+                codigo = 0;
+                cliente.mostrarPedidos();
+            } else {
+                codigo = 1;
+            }
+    } else {
+        codigo = 2;
+    }
+    return codigo;
+}	
 }
