@@ -35,13 +35,11 @@ public class Pedido {
 		this.cantidad = cantidad;
 	}
 	
-	public void agregarProducto(String nombreProducto, int cantidad) {
-		
-		Producto nuevoProducto = new Producto(nombreProducto);
+	public void agregarProducto(String nombreProducto, int cantidad, double precio) {
+		Producto nuevoProducto = new Producto(nombreProducto,precio);
 		productos.put(nombreProducto, nuevoProducto);
 		aumentarCantidadProducto(nombreProducto, cantidad);
 	    }
-	
 	
 	public void aumentarCantidadProducto(String nombre, int cantidad) {
 		int cantidadActual = 0;

@@ -80,7 +80,7 @@ public class Cliente {
 	
 	
 	
-	public void agregarNuevoPedido(String nombreProducto, int cantidad) {
+	public void agregarNuevoPedido(String nombreProducto, int cantidad,double precio) {
 		Pedido pedidoExistente = null;
 	    for (Pedido pedido : pedidos) {
 	        if (pedido.existeProductoPedido(nombreProducto)) {
@@ -91,7 +91,7 @@ public class Cliente {
 	    	pedidoExistente.aumentarCantidadProducto(nombreProducto, cantidad);
 	    }else {    	
 	    Pedido pedido = new Pedido(cantidad);
-	    pedido.agregarProducto(nombreProducto, cantidad);
+	    pedido.agregarProducto(nombreProducto, cantidad,precio);
 	    agregarPedidoAFactura(pedido);
 	    
 	    pedidos.add(pedido);

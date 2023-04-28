@@ -92,10 +92,11 @@ public class Comercio {
 	public int generarPedido(String dniCliente, String nombreProducto, int cantidad) {
     int codigo = -1;
     Cliente cliente = clientes.get(dniCliente);
+    Producto producto = almacen.buscaProducto(nombreProducto);
     if (cliente != null) {
             int stockActual = almacen.consultaStock(nombreProducto);
             if (stockActual >= cantidad) {
-                cliente.agregarNuevoPedido(nombreProducto, cantidad);
+                cliente.agregarNuevoPedido(nombreProducto, cantidad, producto.getPrecio());
                 almacen.actualizarStock(nombreProducto, cantidad);
                 codigo = 0;
                 cliente.mostrarPedidos();
@@ -127,12 +128,11 @@ public class Comercio {
 	    for (Cliente cliente : clientes.values()) {
 	        Factura factura = cliente.buscarFactura(numFactura);
 	        if (factura != null) {
-	            resultado += ("Factura nº: " + numFactura);
-	            resultado +=("Cliente: " + cliente.getNombre() + " " + cliente.getApellidos());
+	            resultado += ("\nFactura nº: " + numFactura + "\n");
+	            resultado +=("Cliente: " + cliente + "\n");
 	            factura.mostrarFactura(); 
 	        }
 	    }
-	    resultado +=("La factura nº " + numFactura + " no existe.");
 	    return resultado;
 	}
 		
