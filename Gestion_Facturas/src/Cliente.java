@@ -1,4 +1,4 @@
-import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Objects;
@@ -9,7 +9,7 @@ public class Cliente {
 	private String apellidos;
 	private int descuento;
 	private ArrayList<Pedido> pedidos;
-	private LinkedHashMap<LocalDateTime, Factura> facturas;
+	private LinkedHashMap<String, Factura> facturas;
 	
 	public Cliente(String dni, String nombre, String apellidos, int descuento) {
 		this.dni = dni;
@@ -17,12 +17,12 @@ public class Cliente {
 		this.apellidos = apellidos;
 		this.descuento = descuento;
 		this.pedidos = new ArrayList<Pedido>();
-		this.facturas = new LinkedHashMap<LocalDateTime, Factura>();
+		this.facturas = new LinkedHashMap<String, Factura>();
 	}
 	
 	public Cliente() {
 		this.pedidos = new ArrayList<Pedido>();
-		this.facturas = new LinkedHashMap<LocalDateTime, Factura>();
+		this.facturas = new LinkedHashMap<String, Factura>();
 	}
 
 	public String getDni() {
@@ -70,30 +70,14 @@ public class Cliente {
 		this.pedidos = pedidos;
 	}
 
-	public LinkedHashMap<LocalDateTime, Factura> getFacturas() {
+	public LinkedHashMap<String, Factura> getFacturas() {
 		return facturas;
 	}
 
-	public void setFacturas(LinkedHashMap<LocalDateTime, Factura> facturas) {
+	public void setFacturas(LinkedHashMap<String, Factura> facturas) {
 		this.facturas = facturas;
 	}
 	
-	/*public void agregarNuevoPedido(int cantidad, String nombreProducto) {
-		
-		Pedido pedidoExistente = null;
-	    for (Pedido pedido : pedidos) {
-	        if (pedido.existeProductoPedido(nombreProducto)) {
-	            pedidoExistente = pedido;
-	        }
-	        
-	    }if(pedidoExistente != null) {
-	    	pedidoExistente.aumentarCantidadProducto(nombreProducto, cantidad);
-	    }else {
-	    	Pedido pedido = new Pedido(cantidad);
-	        pedido.agregarProducto(nombreProducto,cantidad);
-	        pedidos.add(pedido);
-	    }	
-    }*/
 	
 	
 	public void agregarNuevoPedido(String nombreProducto, int cantidad) {
@@ -108,21 +92,70 @@ public class Cliente {
 	    }else {    	
 	    Pedido pedido = new Pedido(cantidad);
 	    pedido.agregarProducto(nombreProducto, cantidad);
+	    agregarPedidoAFactura(pedido);
 	    
 	    pedidos.add(pedido);
 	    }
 
 	}
 	
-	public void mostrarPedidos() {
-		for (Pedido pedido : pedidos) {
-	        System.out.print("Cantidad: " + pedido.getCantidad());
-	        System.out.print(" Producto:");
-	        for (Producto producto : pedido.getProductos().values()) {
-	            System.out.println(producto.getNombre());
-	            
+	public void agregarPedidoAFactura(Pedido pedido) {
+	    Factura factura = buscarUltimaFactura();
+	    if (factura != null) {
+	        factura.agregarPedido(pedido);
+	    }
+	}
+	
+	private Factura buscarUltimaFactura() {
+	    Factura ultimaFactura = null;
+	    for (Factura factura : facturas.values()) {
+	        if (!factura.isEstaPagada()) {
+	            ultimaFactura = factura;
 	        }
 	    }
+	    return ultimaFactura;
+	}
+	
+	public Factura buscarFactura(String numeroFactura) {
+	    for (Factura factura : facturas.values()) {
+	        if (factura.getFechaCreacion().equals(numeroFactura)) {
+	            return factura;
+	        }
+	    }
+	    return null;
+	}
+	
+	public String mostrarFactura(String numFactura) {
+		String resultado = "";
+        for (Factura factura : facturas.values()) {
+            if (factura.getFechaCreacion() == numFactura) {
+                resultado = factura.mostrarFactura();
+            }
+        }
+        return resultado;
+    }
+	
+	public void almacenarFactura(Factura factura) {
+		facturas.put(factura.getFechaCreacion(), factura);
+	}
+	
+	public Factura crearFactura(Cliente cliente) {
+		Factura factura = new Factura(cliente);
+		
+		return factura;
+	}
+	
+	public String mostrarPedidos() {
+		String resultado = "";
+		for (Pedido pedido : pedidos) {
+	        for (Producto producto : pedido.getProductos().values()) {
+	        	resultado +=("\nProducto: ");
+	            resultado+=(producto.getNombre());
+	            resultado +=("\t\tCantidad: " + pedido.getCantidad());
+	            resultado +=("\tPrecio " + producto.getPrecio());
+	        }
+		}
+		return resultado;
 	}
 	
 	@Override
@@ -137,9 +170,9 @@ public class Cliente {
 		return Objects.equals(dni, other.dni);
 	}
 
-	@Override
+	
 	public String toString() {
-		return "DNI: " + dni + "\nNombre: " + nombre + "\nApellidos: " + apellidos + "\nPedidos: " + pedidos;
+		return nombre + " " + apellidos + mostrarPedidos();
 	}
 	
 	

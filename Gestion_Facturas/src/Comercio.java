@@ -51,7 +51,7 @@ public class Comercio {
 		Cliente cliente = null;
 		
 		if(!clienteExiste(dni)) {
-			cliente = new Cliente(nombre,apellidos,dni,descuento);
+			cliente = new Cliente(dni,nombre,apellidos,descuento);
 			clientes.put(dni, cliente);
 			codigo = 0;
 		} else {
@@ -107,4 +107,39 @@ public class Comercio {
     }
     return codigo;
 }	
+	public String generarFactura(String dni) {
+		String resultado = "";
+		Cliente cliente = buscaCliente(dni);
+		if(cliente == null) {
+			resultado += "El Cliente NO Existe!";
+		}else if(cliente.getPedidos().isEmpty()) {
+			resultado+= "El Pedido esta Vacio!";
+		}else {
+			Factura factura = cliente.crearFactura(cliente);
+			cliente.almacenarFactura(factura);
+			resultado+="La Factura se a Generado Correctamente con Numero: " + factura.getFechaCreacion();
+		}
+		return resultado;
+	}
+	
+	public String mostrarFactura(String numFactura) {
+		String resultado = "";
+	    for (Cliente cliente : clientes.values()) {
+	        Factura factura = cliente.buscarFactura(numFactura);
+	        if (factura != null) {
+	            resultado += ("Factura nº: " + numFactura);
+	            resultado +=("Cliente: " + cliente.getNombre() + " " + cliente.getApellidos());
+	            factura.mostrarFactura(); 
+	        }
+	    }
+	    resultado +=("La factura nº " + numFactura + " no existe.");
+	    return resultado;
+	}
+		
+	@Override
+	public String toString() {
+		return almacen.toString();
+	} 
+	
+	
 }

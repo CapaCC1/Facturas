@@ -100,6 +100,17 @@ public class PruebaComercio {
 					System.out.println("\nNo existe un cliente con ese DNI.");
 				}
 				break;
+			case 5:
+				System.out.println("\n--GENERAR FACTURA--\n");
+				System.out.print("Introduce el DNI del Cliente: ");
+				dni = in1.next();
+				System.out.println(amazon.generarFactura(dni));
+				break;
+			case 6:
+				System.out.println("\n--MOSTRAR FACTURA--\n");
+				System.out.print("Introduce el Numero de Factura: ");
+				String numeroFactura = in1.next();
+				System.out.println(amazon.mostrarFactura(numeroFactura));
 			}
 		}
 
