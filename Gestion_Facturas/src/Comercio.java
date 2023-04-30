@@ -1,4 +1,5 @@
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public class Comercio {
@@ -130,7 +131,22 @@ public class Comercio {
 	public String buscaFacturaDniCliente(String dni) {
 		String resultado = "";
 		Cliente cliente = buscaCliente(dni);
-		resultado +="\n" + "Facturas del Cliente " + cliente.getNombre()  + " " + cliente.getApellidos() + ": " + "\n\t" + cliente.buscaFacturaDni(dni);
+		if(cliente != null) {	
+			resultado +="\n" + "Facturas del Cliente " + cliente.getNombre()  + " " + cliente.getApellidos() + ": " + "\n\t" + cliente.buscaFacturaDni(dni);
+		}else {
+			resultado += "El Cliente NO Existe!";
+		}
+		return resultado;
+	}
+	
+	public String generarFacturaArchivo(String numeroFactura) throws IOException {
+		String resultado = "";
+		for(Cliente cliente : clientes.values()) {
+			Factura factura = cliente.buscarFactura(numeroFactura);
+			if(factura.getFechaCreacion().equals(numeroFactura)) {
+			   resultado += cliente.guardarFacturaEnArchivo(numeroFactura);
+			}
+		}
 		return resultado;
 	}
 	

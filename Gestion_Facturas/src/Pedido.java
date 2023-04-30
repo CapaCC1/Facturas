@@ -1,32 +1,33 @@
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class Pedido {
 	private int cantidad;
-	private LinkedHashMap<String,Producto> productos;
+	private LinkedHashMap<Producto,Integer> productos;
 	private boolean pedidoAbierto;
 
-	public Pedido(int cantidad, LinkedHashMap<String, Producto> productos) {
+	public Pedido(int cantidad, LinkedHashMap<Producto, Integer> productos) {
 		this.cantidad = cantidad;
-		this.productos = new LinkedHashMap<String, Producto>();
+		this.productos = new LinkedHashMap<Producto, Integer>();
 	}
 	
 	public Pedido(int cantidad) {
 		this.cantidad = 0;
-		this.productos = new LinkedHashMap<String, Producto>();
+		this.productos = new LinkedHashMap<Producto, Integer>();
 		this.pedidoAbierto = true;
 	}
 	
 	public Pedido() {
 		this.cantidad = 0;
-		this.productos = new LinkedHashMap<String, Producto>();
+		this.productos = new LinkedHashMap<Producto, Integer>();
 		this.pedidoAbierto = true;
 	}
 	
-	public LinkedHashMap<String, Producto> getProductos() {
+	public LinkedHashMap<Producto, Integer> getProductos() {
 		return productos;
 	}
 
-	public void setProductos(LinkedHashMap<String, Producto> productos) {
+	public void setProductos(LinkedHashMap<Producto, Integer> productos) {
 		this.productos = productos;
 	}
 
@@ -48,14 +49,14 @@ public class Pedido {
 
 	public void agregarProducto(String nombreProducto, int cantidad, double precio) {
 		Producto nuevoProducto = new Producto(nombreProducto,precio);
-		productos.put(nombreProducto, nuevoProducto);
+		productos.put(nuevoProducto, cantidad);
 		aumentarCantidadProducto(nombreProducto, cantidad);
 	    }
 	
 	public void aumentarCantidadProducto(String nombre, int cantidad) {
 		int cantidadActual = 0;
 		Producto producto = buscarProductoPedido(nombre);
-	    for (Producto pc : productos.values()) {
+	    for (Producto pc : productos.keySet()) {
 	        if(pc.equals(producto)) {
 	        	cantidadActual = getCantidad();
 	        	setCantidad(cantidadActual + cantidad);
@@ -64,23 +65,35 @@ public class Pedido {
 	}
 	
 	public Producto buscarProductoPedido(String nombre) {
-		
-		Producto producto = productos.get(nombre);
-		return producto;
+	    for (Map.Entry<Producto, Integer> entry : productos.entrySet()) {
+	        if (entry.getKey().getNombre().equals(nombre)) {
+	            return entry.getKey();
+	        }
+	    }
+	    return null;
 	}
 	
 	public Producto getProducto() {
 		Producto producto = null;
-		for (Producto p : productos.values()) {
+		for (Producto p : productos.keySet()) {
 			producto = p;
 		}
 		return producto;
 	}
 	
+	public int getCantidadPedida(Producto producto) {
+	    for (Map.Entry<Producto, Integer> entry : productos.entrySet()) {
+	        if (entry.getKey().equals(producto)) {
+	            return entry.getValue();
+	        }
+	    }
+	    return 0;
+	}
+	
 	public boolean existeProductoPedido(String nombre) {
 		
 		Producto producto = buscarProductoPedido(nombre);
-		    for (Producto p : productos.values()) {
+		    for (Producto p : productos.keySet()) {
 		        if (p.equals(producto)) {
 		            return true;
 		        }

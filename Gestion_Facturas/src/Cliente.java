@@ -1,4 +1,6 @@
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -104,7 +106,7 @@ public class Cliente {
 	    }
 	}
 	
-	private Factura buscarFactura(String numeroFactura) {
+	public Factura buscarFactura(String numeroFactura) {
 	    for (Map.Entry<String, Factura> f : facturas.entrySet()) {
 	        if (f.getValue().getFechaCreacion().equals(numeroFactura)) {
 	            return f.getValue();
@@ -174,32 +176,51 @@ public class Cliente {
 	
 	public String imprimirFactura(String numeroFactura) {
 	    StringBuilder tabla = new StringBuilder();    
-	        Factura factura = buscarFactura(numeroFactura);
-	        if (factura != null) {  
-	        	DecimalFormat df = new DecimalFormat("#.##");
-	        	Pedido pedido = factura.getPedido();
-	        	if (pedido != null && pedido.getProducto() != null) {          	
+	    Factura factura = buscarFactura(numeroFactura);
+	    if (factura != null) {  
+	        DecimalFormat df = new DecimalFormat("#.##");
+	        Pedido pedido = factura.getPedido();
+	        if (pedido != null && pedido.getProductos() != null && !pedido.getProductos().isEmpty()) {
 	            tabla.append("\nCliente: " + factura.getCliente().getNombre() + " " + factura.getCliente().getApellidos());
 	            tabla.append("\nFactura N° " + factura.getFechaCreacion() + "\n");
-	            tabla.append("Producto\tUnidades\tPrecio\t\tDescuento\tSubtotal\n");
+	            tabla.append("\nProducto\tUnidades\tPrecio\t\tDescuento\tSubtotal\n");
 	            tabla.append("-----------------------------------------------------------------------------\n");
-		            Producto producto = pedido.getProducto();
-		            int unidades = pedido.getCantidad();
-		            double precio = producto.getPrecio();
-		            double descuento = factura.getCliente().getDescuento();
-		            double subtotal = unidades * precio * (1 - descuento / 100);
-		            tabla.append(String.format("%-17s%-15s%-16s%-16s%-15s\n", producto.getNombre(), unidades, df.format(precio), df.format(descuento), df.format(subtotal)));
-		            double iva = subtotal * 0.21;
-		            double total = subtotal + iva;
-		            tabla.append("-----------------------------------------------------------------------------\n");
-		            tabla.append(String.format("%-64s%-15s\n", "Subtotal", df.format(subtotal)));
-		            tabla.append(String.format("%-64s%-15s\n", "IVA 21%", df.format(iva)));
-		            tabla.append(String.format("%-64s%-15s\n", "TOTAL", df.format(total)));
-	            }else {
-	            	tabla.append("El pedido No Existe!"); 
+	            double subtotal = 0.0;
+	            for (Map.Entry<Producto, Integer> productoPedido : pedido.getProductos().entrySet()) {
+	                Producto producto = productoPedido.getKey();
+	                int unidades = pedido.getCantidadPedida(producto);
+	                double precio = producto.getPrecio();
+	                double descuento = factura.getCliente().getDescuento();
+	                double subtotalProducto = unidades * precio * (1 - descuento / 100);
+	                tabla.append(String.format("%-17s%-15s%-16s%-16s%-15s\n", producto.getNombre(), unidades + "Uds", df.format(precio) + "€", df.format(descuento) + "%", df.format(subtotalProducto) + "€"));
+	                subtotal += subtotalProducto;
 	            }
+	            double iva = subtotal * 0.21;
+	            double total = subtotal + iva;
+	            tabla.append("-----------------------------------------------------------------------------\n");
+	            tabla.append(String.format("%-64s%-15s\n", "Subtotal", df.format(subtotal) + "€"));
+	            tabla.append(String.format("%-64s%-15s\n", "IVA 21%", df.format(iva) + "€"));
+	            tabla.append(String.format("%-64s%-15s\n", "TOTAL", df.format(total) + "€"));
+	        } else {
+	            tabla.append("El pedido No Existe o no contiene productos!"); 
+	        }
 	    }
 	    return tabla.toString();
+	}
+	
+	public String guardarFacturaEnArchivo(String numeroFactura) throws IOException {
+		String resultado = "";
+	    Factura factura = buscarFactura(numeroFactura);
+	    if (factura == null) {
+	        throw new IllegalArgumentException("La factura con número " + numeroFactura + " no existe.");
+	    }else {	
+	    String nombreArchivo = "C:\\Users\\Usuario\\Desktop\\Escritorio\\Programacion\\DAM\\" + factura.getFechaCreacion() +".txt";
+	    FileWriter writer = new FileWriter(nombreArchivo);
+	    resultado += "\nArchivo Generado Correctamente en ruta: " + nombreArchivo;
+	    writer.write(imprimirFactura(numeroFactura));
+	    writer.close();
+	    return resultado;
+	    }
 	}
 	
 	@Override

@@ -1,3 +1,5 @@
+import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class PruebaComercio {
@@ -6,9 +8,18 @@ public class PruebaComercio {
 		Scanner in1 = new Scanner(System.in);
 		
 		Comercio amazon = new Comercio();
+		amazon.agregarCliente("Paco", "Sainz", "1", 5);
+		amazon.agregarCliente("Jesus", "Lopez", "2", 6);
+		amazon.agregarCliente("Lucas", "Marco", "3", 7);
+		amazon.agregarCliente("Eric", "Torices", "4", 8);
+		
+		amazon.incorporarProducto("Coca-Cola", 1.3, 5);
+		amazon.incorporarProducto("Fanta", 1.2, 5);
+		amazon.incorporarProducto("Lacasitos", 1.1, 5);
+		amazon.incorporarProducto("C", 1, 5);
 		boolean salir = true;
 		while(salir) {
-			
+			try {
 			System.out.println("\n\t\t-- PRUEBA COMERCIO --\n");
 			System.out.println("\t1. Registrar Un Cliente");
 			System.out.println("\t2. Incorporacion de Nuevos Productos al Almacen");
@@ -38,7 +49,7 @@ public class PruebaComercio {
 				if(codigo == 0) {
 					System.out.println("\nCliente Agregado con Exito!");
 				}else if(codigo == 1) {
-					System.out.println("\nERROR al Agregar Cliente!");
+					System.out.println("\nERROR el Cliente Ya Existe!");
 				}
 				break;
 				
@@ -55,9 +66,8 @@ public class PruebaComercio {
 					System.out.println("\nProducto Incorporado con EXITO!");
 					
 				}else if(codigo == 1) {
-					System.out.println("\nERROR al Incorporar Producto!");
+					System.out.println("\nERROR el Producto Ya Existe!");
 				}
-				System.out.println(amazon.mostrarProductos());
 				break;
 				
 			case 3:
@@ -87,7 +97,7 @@ public class PruebaComercio {
 				if(codigo == 0) {
 					 System.out.println("\nPedido generado correctamente.");
 				}else if(codigo == 1) {
-					System.out.println("\nNo hay suficiente stock del producto seleccionado.");
+					System.out.println("\nEl Producto NO Existe o No Existe Stock SUFICIENTE!");
 				}else if(codigo == 2) {
 					System.out.println("\nNo existe un cliente con ese DNI.");
 				}
@@ -110,9 +120,20 @@ public class PruebaComercio {
 				dni = in1.next();
 				System.out.println(amazon.buscaFacturaDniCliente(dni));
 				break;
+			case 8:
+				System.out.println("\n--GUARDAR UNA FACTURA EN UN ARCHIVO--\n");
+				System.out.print("Introduce el Numero de Factura: ");
+				numeroFactura = in1.next();
+				System.out.println(amazon.generarFacturaArchivo(numeroFactura));	
+			}
+			}catch(InputMismatchException e ) {
+				System.out.println("ERROR, Valor Inorrecto!");
+				in1.next();
+			}catch(IOException e1) {
+				System.out.println("ERROR, Valor Inorrecto!");
+				in1.next();
 			}
 		}
-
+		in1.close();
 	}
-
 }
