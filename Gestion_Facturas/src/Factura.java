@@ -1,32 +1,25 @@
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Factura {
 	private String fechaCreacion;
 	private Cliente cliente;
 	private double total;
-	private boolean estaPagada;
-	private ArrayList<Pedido> pedidos;
+	private Pedido pedido;
 	
 	public Factura(String id, ArrayList<Pedido> pedidos, Cliente cliente, double total) {
 		this.fechaCreacion = generarIdUnico();
-		this.pedidos = pedidos;
 		this.cliente = cliente;
 		this.total = total;
 	}
-	public Factura(Cliente cliente) {
+	public Factura(Cliente cliente, Pedido pedido) {
 		this.fechaCreacion = generarIdUnico();
 		this.cliente = cliente;
+		this.pedido = pedido;
 	}
 	
-	
-	public boolean isEstaPagada() {
-		return estaPagada;
-	}
-	public void setEstaPagada(boolean estaPagada) {
-		this.estaPagada = estaPagada;
-	}
 	public String getFechaCreacion() {
 		return fechaCreacion;
 	}
@@ -35,14 +28,12 @@ public class Factura {
 		this.fechaCreacion = fechaCreacion;
 	}
 
-	public ArrayList<Pedido> getPedidos() {
-		return pedidos;
+	public Pedido getPedido() {
+		return pedido;
 	}
-
-	public void setPedidos(ArrayList<Pedido> pedidos) {
-		this.pedidos = pedidos;
+	public void setPedido(Pedido pedido) {
+		this.pedido = pedido;
 	}
-
 	public Cliente getCliente() {
 		return cliente;
 	}
@@ -61,26 +52,34 @@ public class Factura {
 	
 	private String generarIdUnico() {
         LocalDateTime ahora = LocalDateTime.now();
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("ddmmHHmm");
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("ddmmHHmmss");
         String timestamp = ahora.format(formato);
         return timestamp;
     }
 	
 	public void agregarPedido(Pedido pedido) {
-        pedidos.add(pedido);
+       pedido = new Pedido();
     }
 	
-	public String mostrarFactura() {
-		String resultado = "";
-		resultado += "\nNombre Cliente: " + cliente + "\nFactura Nr: " + fechaCreacion;
-		return resultado;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Factura other = (Factura) obj;
+		return Objects.equals(fechaCreacion, other.fechaCreacion);
 	}
 	
 	@Override
 	public String toString() {
 		
-		return "\nNombre Cliente: " + cliente + "\nFactura Nr: " + fechaCreacion;
+		return "Factura Nr: " + fechaCreacion;
 	}
-	
-	
+	@Override
+	public int hashCode() {
+		return Objects.hash(fechaCreacion);
+	}
 }

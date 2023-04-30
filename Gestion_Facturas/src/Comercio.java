@@ -91,7 +91,7 @@ public class Comercio {
 	
 	public int generarPedido(String dniCliente, String nombreProducto, int cantidad) {
     int codigo = -1;
-    Cliente cliente = clientes.get(dniCliente);
+    Cliente cliente = buscaCliente(dniCliente);
     Producto producto = almacen.buscaProducto(nombreProducto);
     if (cliente != null) {
             int stockActual = almacen.consultaStock(nombreProducto);
@@ -99,7 +99,6 @@ public class Comercio {
                 cliente.agregarNuevoPedido(nombreProducto, cantidad, producto.getPrecio());
                 almacen.actualizarStock(nombreProducto, cantidad);
                 codigo = 0;
-                cliente.mostrarPedidos();
             } else {
                 codigo = 1;
             }
@@ -107,35 +106,34 @@ public class Comercio {
         codigo = 2;
     }
     return codigo;
-}	
-	public String generarFactura(String dni) {
+	}	
+	
+	public String generarFacturaCliente(String dni) {
 		String resultado = "";
 		Cliente cliente = buscaCliente(dni);
 		if(cliente == null) {
 			resultado += "El Cliente NO Existe!";
-		}else if(cliente.getPedidos().isEmpty()) {
-			resultado+= "El Pedido esta Vacio!";
 		}else {
-			Factura factura = cliente.crearFactura(cliente);
-			cliente.almacenarFactura(factura);
-			resultado+="La Factura se a Generado Correctamente con Numero: " + factura.getFechaCreacion();
+			resultado += cliente.generarFactura(dni);
 		}
 		return resultado;
 	}
-	
-	public String mostrarFactura(String numFactura) {
-		String resultado = "";
-	    for (Cliente cliente : clientes.values()) {
-	        Factura factura = cliente.buscarFactura(numFactura);
-	        if (factura != null) {
-	            resultado += ("\nFactura nº: " + numFactura + "\n");
-	            resultado +=("Cliente: " + cliente + "\n");
-	            factura.mostrarFactura(); 
-	        }
-	    }
-	    return resultado;
-	}
 		
+	public String imprimirFactura(String numeroFactura) {
+		String tabla = "";
+	   for(Cliente cliente : clientes.values()) {
+		   tabla += cliente.imprimirFactura(numeroFactura);
+	   }
+	   return tabla;
+	}
+	
+	public String buscaFacturaDniCliente(String dni) {
+		String resultado = "";
+		Cliente cliente = buscaCliente(dni);
+		resultado +="\n" + "Facturas del Cliente " + cliente.getNombre()  + " " + cliente.getApellidos() + ": " + "\n\t" + cliente.buscaFacturaDni(dni);
+		return resultado;
+	}
+	
 	@Override
 	public String toString() {
 		return almacen.toString();

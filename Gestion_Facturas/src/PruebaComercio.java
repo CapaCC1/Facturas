@@ -6,15 +6,6 @@ public class PruebaComercio {
 		Scanner in1 = new Scanner(System.in);
 		
 		Comercio amazon = new Comercio();
-		/*amazon.agregarCliente("Paco", "Sainz", "1", 5);
-		amazon.agregarCliente("Jesus", "Lopez", "2", 6);
-		amazon.agregarCliente("Lucas", "Marco", "3", 7);
-		amazon.agregarCliente("Eric", "Torices", "4", 8);
-		
-		amazon.incorporarProducto("Coca-Cola", 1.3, 5);
-		amazon.incorporarProducto("Fanta", 1.2, 5);
-		amazon.incorporarProducto("Lacasitos", 1.1, 5);
-		amazon.incorporarProducto("Chuapa-Chups", 1, 5);*/
 		boolean salir = true;
 		while(salir) {
 			
@@ -31,6 +22,7 @@ public class PruebaComercio {
 			System.out.print("\tIntroduce una Opcion: ");
 			int opcion = in1.nextInt();
 			switch(opcion) {
+			
 			case 1:
 				System.out.println("\n--REGISTRAR UN CLIENTE--\n");
 				System.out.print("Introduzca el Nombre: ");
@@ -104,13 +96,20 @@ public class PruebaComercio {
 				System.out.println("\n--GENERAR FACTURA--\n");
 				System.out.print("Introduce el DNI del Cliente: ");
 				dni = in1.next();
-				System.out.println(amazon.generarFactura(dni));
+				System.out.println(amazon.generarFacturaCliente(dni));
 				break;
 			case 6:
 				System.out.println("\n--MOSTRAR FACTURA--\n");
 				System.out.print("Introduce el Numero de Factura: ");
 				String numeroFactura = in1.next();
-				System.out.println(amazon.mostrarFactura(numeroFactura));
+				System.out.println(amazon.imprimirFactura(numeroFactura));
+				break;
+			case 7:
+				System.out.println("\n--MOSTRAR FACTURAS CLIENTE--\n");
+				System.out.print("Introduce el DNI del Cliente: ");
+				dni = in1.next();
+				System.out.println(amazon.buscaFacturaDniCliente(dni));
+				break;
 			}
 		}
 

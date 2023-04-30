@@ -1,6 +1,8 @@
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class Cliente {
@@ -9,6 +11,7 @@ public class Cliente {
 	private String apellidos;
 	private int descuento;
 	private ArrayList<Pedido> pedidos;
+	private Pedido pedidoActual;
 	private LinkedHashMap<String, Factura> facturas;
 	
 	public Cliente(String dni, String nombre, String apellidos, int descuento) {
@@ -78,84 +81,125 @@ public class Cliente {
 		this.facturas = facturas;
 	}
 	
+	public void setPedidoActual(Pedido pedidoActual) {
+		this.pedidoActual = pedidoActual;
+	}
 	
-	
-	public void agregarNuevoPedido(String nombreProducto, int cantidad,double precio) {
-		Pedido pedidoExistente = null;
-	    for (Pedido pedido : pedidos) {
-	        if (pedido.existeProductoPedido(nombreProducto)) {
-	            pedidoExistente = pedido;
-	        }   
-	    }
-		if(pedidoExistente != null) {
-	    	pedidoExistente.aumentarCantidadProducto(nombreProducto, cantidad);
-	    }else {    	
-	    Pedido pedido = new Pedido(cantidad);
-	    pedido.agregarProducto(nombreProducto, cantidad,precio);
-	    agregarPedidoAFactura(pedido);
-	    
-	    pedidos.add(pedido);
-	    }
+	public Pedido getPedidoActual() {
+		return pedidoActual;
+	}
 
-	}
-	
-	public void agregarPedidoAFactura(Pedido pedido) {
-	    Factura factura = buscarUltimaFactura();
-	    if (factura != null) {
-	        factura.agregarPedido(pedido);
-	    }
-	}
-	
-	private Factura buscarUltimaFactura() {
-	    Factura ultimaFactura = null;
-	    for (Factura factura : facturas.values()) {
-	        if (!factura.isEstaPagada()) {
-	            ultimaFactura = factura;
+	public void agregarNuevoPedido(String nombreProducto, int cantidad, double precio) {
+	    if (pedidoActual == null) {
+	        crearNuevoPedido();
+	        Pedido pedido = getPedidoActual();
+		    pedido.agregarProducto(nombreProducto, cantidad, precio);
+	    }else {
+	    	Pedido pedido = getPedidoActual();
+	    	if (pedido.existeProductoPedido(nombreProducto)) {
+	            pedido.aumentarCantidadProducto(nombreProducto, cantidad);
+	        } else {
+	            pedido.agregarProducto(nombreProducto, cantidad, precio);
 	        }
 	    }
-	    return ultimaFactura;
 	}
 	
-	public Factura buscarFactura(String numeroFactura) {
-	    for (Factura factura : facturas.values()) {
-	        if (factura.getFechaCreacion().equals(numeroFactura)) {
-	            return factura;
+	private Factura buscarFactura(String numeroFactura) {
+	    for (Map.Entry<String, Factura> f : facturas.entrySet()) {
+	        if (f.getValue().getFechaCreacion().equals(numeroFactura)) {
+	            return f.getValue();
 	        }
 	    }
 	    return null;
 	}
 	
-	public String mostrarFactura(String numFactura) {
-		String resultado = "";
-        for (Factura factura : facturas.values()) {
-            if (factura.getFechaCreacion() == numFactura) {
-                resultado = factura.mostrarFactura();
-            }
-        }
-        return resultado;
-    }
+	private Pedido buscarPedido() {
+	    Pedido pedidoEncontrado = null;
+	    for (Pedido pedido : pedidos) {
+	        if (pedido.getEstadoPedido() == true) {
+	            pedidoEncontrado = pedido;
+	            break;
+	        }
+	    }
+	    return pedidoEncontrado;
+	}
 	
-	public void almacenarFactura(Factura factura) {
+	private void almacenarFactura(Factura factura) {
 		facturas.put(factura.getFechaCreacion(), factura);
 	}
 	
-	public Factura crearFactura(Cliente cliente) {
-		Factura factura = new Factura(cliente);
+	public Factura crearFactura(Cliente cliente,Pedido pedido) {
+		Factura factura = new Factura(cliente, pedido);
 		
 		return factura;
 	}
 	
-	public String mostrarPedidos() {
+	public String buscaFacturaDni(String dni) {
 		String resultado = "";
-		for (Pedido pedido : pedidos) {
-	        for (Producto producto : pedido.getProductos().values()) {
-	        	resultado +=("\nProducto: ");
-	            resultado+=(producto.getNombre());
-	            resultado +=("\t\tCantidad: " + pedido.getCantidad());
-	            resultado +=("\tPrecio " + producto.getPrecio());
+	    for (Map.Entry<String, Factura> entry : facturas.entrySet()) {
+	        Factura factura = entry.getValue();
+	        Cliente cliente = factura.getCliente();
+	        if (cliente.getDni().equals(dni)) {
+	            resultado +="\n" + factura.getFechaCreacion();
 	        }
-		}
-		return resultado;
+	    }
+	    return resultado;
+	}
+	
+	public String generarFactura(String dni) {
+	    String resultado = "";
+	    if (pedidoActual != null){
+	    	Pedido pedidoActual = buscarPedido();
+	        Factura factura = crearFactura(this,pedidoActual);
+	        almacenarFactura(factura);
+	        cerrarPedidoActual();
+	        crearNuevoPedido();
+	        resultado += "La factura se ha generado correctamente con número: " + factura.getFechaCreacion();
+	    } else {
+	        resultado += "El pedido está vacío!";
+	    }
+	    return resultado;
+	}
+	
+	private void cerrarPedidoActual() {
+	    Pedido pedidoActual = getPedidoActual();
+	    pedidoActual.cerrarPedido();
+	}
+
+	private void crearNuevoPedido() {
+	    Pedido nuevoPedido = new Pedido();
+	    this.pedidos.add(nuevoPedido);
+	    setPedidoActual(nuevoPedido);
+	}
+	
+	public String imprimirFactura(String numeroFactura) {
+	    StringBuilder tabla = new StringBuilder();    
+	        Factura factura = buscarFactura(numeroFactura);
+	        if (factura != null) {  
+	        	DecimalFormat df = new DecimalFormat("#.##");
+	        	Pedido pedido = factura.getPedido();
+	        	if (pedido != null && pedido.getProducto() != null) {          	
+	            tabla.append("\nCliente: " + factura.getCliente().getNombre() + " " + factura.getCliente().getApellidos());
+	            tabla.append("\nFactura N° " + factura.getFechaCreacion() + "\n");
+	            tabla.append("Producto\tUnidades\tPrecio\t\tDescuento\tSubtotal\n");
+	            tabla.append("-----------------------------------------------------------------------------\n");
+		            Producto producto = pedido.getProducto();
+		            int unidades = pedido.getCantidad();
+		            double precio = producto.getPrecio();
+		            double descuento = factura.getCliente().getDescuento();
+		            double subtotal = unidades * precio * (1 - descuento / 100);
+		            tabla.append(String.format("%-17s%-15s%-16s%-16s%-15s\n", producto.getNombre(), unidades, df.format(precio), df.format(descuento), df.format(subtotal)));
+		            double iva = subtotal * 0.21;
+		            double total = subtotal + iva;
+		            tabla.append("-----------------------------------------------------------------------------\n");
+		            tabla.append(String.format("%-64s%-15s\n", "Subtotal", df.format(subtotal)));
+		            tabla.append(String.format("%-64s%-15s\n", "IVA 21%", df.format(iva)));
+		            tabla.append(String.format("%-64s%-15s\n", "TOTAL", df.format(total)));
+	            }else {
+	            	tabla.append("El pedido No Existe!"); 
+	            }
+	    }
+	    return tabla.toString();
 	}
 	
 	@Override
@@ -172,7 +216,7 @@ public class Cliente {
 
 	
 	public String toString() {
-		return nombre + " " + apellidos + mostrarPedidos();
+		return nombre + " ";
 	}
 	
 	

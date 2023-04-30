@@ -3,6 +3,7 @@ import java.util.LinkedHashMap;
 public class Pedido {
 	private int cantidad;
 	private LinkedHashMap<String,Producto> productos;
+	private boolean pedidoAbierto;
 
 	public Pedido(int cantidad, LinkedHashMap<String, Producto> productos) {
 		this.cantidad = cantidad;
@@ -12,11 +13,13 @@ public class Pedido {
 	public Pedido(int cantidad) {
 		this.cantidad = 0;
 		this.productos = new LinkedHashMap<String, Producto>();
+		this.pedidoAbierto = true;
 	}
 	
 	public Pedido() {
 		this.cantidad = 0;
 		this.productos = new LinkedHashMap<String, Producto>();
+		this.pedidoAbierto = true;
 	}
 	
 	public LinkedHashMap<String, Producto> getProductos() {
@@ -35,6 +38,14 @@ public class Pedido {
 		this.cantidad = cantidad;
 	}
 	
+	public boolean getEstadoPedido() {
+		return pedidoAbierto;
+	}
+
+	public void setEstadoPedido(boolean pedidoAbierto) {
+		this.pedidoAbierto = pedidoAbierto;
+	}
+
 	public void agregarProducto(String nombreProducto, int cantidad, double precio) {
 		Producto nuevoProducto = new Producto(nombreProducto,precio);
 		productos.put(nombreProducto, nuevoProducto);
@@ -58,10 +69,17 @@ public class Pedido {
 		return producto;
 	}
 	
+	public Producto getProducto() {
+		Producto producto = null;
+		for (Producto p : productos.values()) {
+			producto = p;
+		}
+		return producto;
+	}
+	
 	public boolean existeProductoPedido(String nombre) {
 		
 		Producto producto = buscarProductoPedido(nombre);
-		
 		    for (Producto p : productos.values()) {
 		        if (p.equals(producto)) {
 		            return true;
@@ -70,11 +88,12 @@ public class Pedido {
 		    return false;
 		}
 	
+	public void cerrarPedido() {
+		setEstadoPedido(false);
+	}
+	
 	@Override
 	public String toString() {
 		return "Producto: " + productos + "\nCantidad: " + cantidad;
 	}
-	
-	
-	
 }
